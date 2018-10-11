@@ -1,2 +1,14 @@
 # Chart-a-Course
-Android mobile game in which players navigate through the cosmos trying to avoid being consumed by the gravitational forces of planets and stars.
+Chart a Course is a fast-pace infinite runner style andriod mobile game.
+
+Players must make their way through the cosmos while trying to avoid the gravitational forces of planets and stars that will consume their vessels. 
+
+This game is currently in development and has the following features completed:
+- Movement controls for the ship
+- A spawning system that recycles game objects to be highly efficient
+- Ship model
+- Moving background
+
+Currently in progress:
+- Planet and star gravitational forces
+- New models
