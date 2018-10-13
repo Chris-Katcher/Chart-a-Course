@@ -12,3 +12,7 @@ This game is currently in development and has the following features completed:
 Currently in progress:
 - Planet and star gravitational forces
 - New models
+
+
+Gif of some pre-alpha gameplay:
+![Screen Shot](/screenshots/current_progress.gif?raw=true "Current Progress")
