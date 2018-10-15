@@ -17,3 +17,7 @@ Currently in progress:
 Gif of some pre-alpha gameplay:
 
 ![Screen Shot](/screenshots/current_progress.gif?raw=true "Current Progress")
+
+New Added Models:
+
+![Screen Shot](/screenshots/added_models.gif?raw=true "Model Progress")
