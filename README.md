@@ -21,3 +21,7 @@ Gif of some pre-alpha gameplay:
 New Added Models:
 
 ![Screen Shot](/screenshots/added_models.gif?raw=true "Model Progress")
+
+Progress on planet/sun gravity:
+![Screen Shot](/screenshots/gravity_progress.gif?raw=true "Gravity Progress")
+
