@@ -137,7 +137,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 8
   m_Type: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.91196764, g: 0.77205884, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -175,7 +175,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &695519547
 GameObject:
@@ -204,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38fc000cff9e29c438a8c6ce03e0e1e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frequency: 2
+  frequency: 3
   asteroid: {fileID: 1634593296415866, guid: 2c2f6a94bfc7bdf49847fded9dd3870a, type: 2}
   ship: {fileID: 1112121955}
 --- !u!4 &695519549
@@ -480,7 +480,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 100006, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
       propertyPath: m_Name

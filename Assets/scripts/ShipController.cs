@@ -15,7 +15,7 @@ public class ShipController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 	
-    void ApplyForce(Vector3 force)
+    public void ApplyForce(Vector3 force)
     {
         rb.AddForce(force);
     }
