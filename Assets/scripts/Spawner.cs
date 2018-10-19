@@ -10,12 +10,13 @@ public class Spawner : MonoBehaviour
     public GameObject ship;
 
     private int current_asteroid = 0;
+    private int asteroid_count = 20;
     private GameObject[] asteroids = new GameObject[200];
 
 	// Use this for initialization
 	void Start ()
     {
-        for(int i = 0; i < 200; i++)
+        for(int i = 0; i < asteroid_count; i++)
         {
             asteroids[i] = Instantiate(asteroid, new Vector3(25, i*5, 0), Quaternion.identity);
         }
@@ -37,9 +38,9 @@ public class Spawner : MonoBehaviour
         {
             nextActionTime += frequency;
             float y_pos = Random.value < .5 ? (Random.value - 0.5f) * 12 : ship.transform.position.y;
-            asteroids[current_asteroid].transform.position = new Vector3(25, y_pos, Random.value < .5 ? 1 : 0);
+            asteroids[current_asteroid].transform.position = new Vector3(25, y_pos, 0); //Random.value < .5 ? 1 : 
             current_asteroid++;
-            if(current_asteroid == 100)
+            if(current_asteroid == asteroid_count)
             {
                 current_asteroid = 0;
             }

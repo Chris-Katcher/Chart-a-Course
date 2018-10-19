@@ -229,7 +229,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1073332054}
   - component: {fileID: 1073332053}
-  - component: {fileID: 1073332052}
   - component: {fileID: 1073332051}
   - component: {fileID: 1073332050}
   m_Layer: 0
@@ -285,20 +284,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &1073332052
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1073332049}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Convex: 0
-  m_InflateMesh: 0
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &1073332053
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -358,7 +343,7 @@ BoxCollider:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1112121955}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.017294679, y: 0.02, z: 0.02}
@@ -464,19 +449,19 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.27077478
+      value: -0.27059805
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.65320826
+      value: 0.6532815
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.27077478
+      value: -0.27059805
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.65320826
+      value: 0.6532815
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
       propertyPath: m_RootOrder
@@ -492,12 +477,28 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -45.031006
+      value: -45
       objectReference: {fileID: 0}
     - target: {fileID: 2300002, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 7d36ea2e18ee40840a4f5077a9a33293, type: 2}
+    - target: {fileID: 400006, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 400006, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 100006, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
+      propertyPath: m_TagString
+      value: Ship
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 78b19c3a03acbd7458bfaf0747b7e716, type: 3}
   m_IsPrefabParent: 0

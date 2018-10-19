@@ -9,22 +9,28 @@ public class Asteroid : MonoBehaviour
     public float speed = 1f;
     public float angle = 0f;
 
-    public GameObject ship;
+    private GameObject ship;
+    private BoxCollider boxCol;
 
+    void Awake()
+    {
+        ship = GameObject.Find("Ship");
+        boxCol = ship.GetComponent<BoxCollider>();
+    }
     // Use this for initialization
     void Start ()
     {
         //gameObject.transform.Rotate(new Vector3(angle, 0, 0));
         float x_vel = Mathf.Cos(Mathf.Deg2Rad * angle) * speed;
         float y_vel = Mathf.Sin(Mathf.Deg2Rad * angle) * speed;
-        ship = GameObject.Find("Ship");
+        
         gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(x_vel, y_vel, 0));
 	}
 
     private void OnTriggerStay(Collider other)
     {
        
-        if (ship.GetComponent<Collider>() == other)
+        if (other.gameObject.tag == "Ship")
         {
             Vector3 force = Vector3.Normalize(new Vector3(0, gameObject.transform.position.y - ship.transform.position.y, 0));
             force.y = force.y * gravity;
