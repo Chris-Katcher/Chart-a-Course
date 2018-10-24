@@ -15,13 +15,14 @@ public class ShipController : MonoBehaviour
 
     private float direction = 0;
 
-    private const float thrust_capacity = 100f;
+    private const float thrust_capacity = 500f;
 
-    private float current_thrust = 100f;
+    private float current_thrust = 500f;
     private float thrust_engaged = 0;
     public float thrust_delay = 0.5f;
     public float thrust_recovery = .05f;
-
+    public float thrust_depletion = 0.75f;
+    public float depletion_rate = 1f;
 	// Use this for initialization
 	void Start ()
     {
@@ -82,29 +83,12 @@ public class ShipController : MonoBehaviour
             direction = y_Velocity;
         }
 
-        //if(Input.GetButtonDown("Fire1"))
-        //{
-        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // - gameObject.transform.position;
-        //    Plane plane = new Plane(Vector3.forward, transform.position);
-        //    float dist = 0;
-        //    if (plane.Raycast(ray, out dist))
-        //    {
-        //        Vector3 mousePos = ray.GetPoint(dist);
-        //        mousePos.z = 0;
-        //        mousePos.x = 0;
-        //        mousePos.y -= ship.transform.position.y;
-        //        mousePos = mousePos.normalized;
-                
-        //        Debug.Log(mousePos);
-        //        ApplyTorque(mousePos * torque_force);
-        //    }
-        //}
-
+       
         if (current_thrust > 0 && Input.GetButton("Fire1"))
         {
-            current_thrust--;
+            current_thrust-= depletion_rate;
             thrust_engaged = Time.time;
-
+            
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // - gameObject.transform.position;
             Plane plane = new Plane(Vector3.forward, transform.position);
             float dist = 0;
@@ -114,31 +98,14 @@ public class ShipController : MonoBehaviour
                 mousePos.z = 0;
                 mousePos.x = 0;
                 mousePos.y -= ship.transform.position.y;
-                Debug.Log(mousePos);
+                //Debug.Log(mousePos);
                 ApplyForce(mousePos * thrustForce);
 
                 mousePos = mousePos.normalized;
-                //if(mousePos.y != direction)
-                //{
-                //    direction = mousePos.y;
-                //    mousePos.x = mousePos.y;
-                //    mousePos.y = 0;
-                //    ApplyTorque(mousePos * torque_force);
-                //}
-
-                
             }
-            //mousePos.z = -10;
-            //Camera.main.ScreenToWorldPoint(mousePos);
-
-            //Vector3 mousePos = Input.mousePosition;
-            //mousePos.y -= _screenMiddle;
-            //mousePos = mousePos.normalized;
-            //mousePos.x = 0;
-            //mousePos.z = 0;
-            //ApplyForce(mousePos * thrustForce);
+            
         }
-        else if(thrust_engaged + thrust_delay <= Time.time)
+        else if((thrust_engaged + thrust_delay <= Time.time) && current_thrust < thrust_capacity)
         {
             current_thrust++;
             thrust_engaged += thrust_recovery;

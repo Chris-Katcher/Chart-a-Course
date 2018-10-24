@@ -562,8 +562,10 @@ MonoBehaviour:
   ship: {fileID: 1112121955}
   thrustUI: {fileID: 0}
   thrustForce: 5
-  thrust_delay: 5
-  thrust_recovery: 0.1
+  thrust_delay: 1
+  thrust_recovery: 0.01
+  thrust_depletion: 0.001
+  depletion_rate: 5
 --- !u!65 &1112121961
 BoxCollider:
   m_ObjectHideFlags: 0
