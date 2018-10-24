@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShipController : MonoBehaviour
 {
     float _screenMiddle = Screen.height / 2;
     public GameObject ship;
+    public Image thrustUI;
 
     public float thrustForce = 30;
     private float torque_force = 300f;
@@ -13,10 +15,18 @@ public class ShipController : MonoBehaviour
 
     private float direction = 0;
 
+    private const float thrust_capacity = 100f;
+
+    private float current_thrust = 100f;
+    private float thrust_engaged = 0;
+    public float thrust_delay = 0.5f;
+    public float thrust_recovery = .05f;
+
 	// Use this for initialization
 	void Start ()
     {
         rb = GetComponent<Rigidbody>();
+        thrustUI = GameObject.Find("BG").GetComponent<Image>();
     }
 	
     public void ApplyForce(Vector3 force)
@@ -32,6 +42,11 @@ public class ShipController : MonoBehaviour
         {
             rb.AddTorque(force);
         }
+    }
+
+    private void UpdateUI()
+    {
+        thrustUI.fillAmount = current_thrust / thrust_capacity;
     }
 
 	// Update is called once per frame
@@ -85,10 +100,10 @@ public class ShipController : MonoBehaviour
         //    }
         //}
 
-        if (Input.GetButton("Fire1"))
+        if (current_thrust > 0 && Input.GetButton("Fire1"))
         {
-
-            
+            current_thrust--;
+            thrust_engaged = Time.time;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // - gameObject.transform.position;
             Plane plane = new Plane(Vector3.forward, transform.position);
@@ -123,5 +138,12 @@ public class ShipController : MonoBehaviour
             //mousePos.z = 0;
             //ApplyForce(mousePos * thrustForce);
         }
+        else if(thrust_engaged + thrust_delay <= Time.time)
+        {
+            current_thrust++;
+            thrust_engaged += thrust_recovery;
+        }
+
+        UpdateUI();
     }
 }
