@@ -14,7 +14,7 @@ public class Asteroid : MonoBehaviour
 
     void Awake()
     {
-        ship = GameObject.Find("Ship");
+        ship = GameObject.Find("ShipContainer");
         boxCol = ship.GetComponent<BoxCollider>();
     }
     // Use this for initialization
@@ -30,7 +30,7 @@ public class Asteroid : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
        
-        if (other.gameObject.tag == "Ship")
+        if (other.gameObject.tag == "ShipContainer")
         {
             Vector3 force = Vector3.Normalize(new Vector3(0, gameObject.transform.position.y - ship.transform.position.y, 0));
             force.y = force.y * gravity;

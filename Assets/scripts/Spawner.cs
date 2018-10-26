@@ -37,8 +37,12 @@ public class Spawner : MonoBehaviour
         if (Time.time > nextActionTime)
         {
             nextActionTime += frequency;
-            float y_pos = Random.value < .5 ? (Random.value - 0.5f) * 12 : ship.transform.position.y;
-            asteroids[current_asteroid].transform.position = new Vector3(25, y_pos, 0); //Random.value < .5 ? 1 : 
+            Ray ray = new Ray(ship.transform.position, ship.transform.TransformDirection(Quaternion.AngleAxis(20, ship.transform.up) * Vector3.forward) * 20);//Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward) * 1000);
+            Vector3 pos = ray.GetPoint(20);
+            float x_pos = pos.x;
+            float y_pos = pos.y;
+            //float y_pos = Random.value < .5 ? (Random.value - 0.5f) * 12 : ship.transform.position.y;
+            asteroids[current_asteroid].transform.position = new Vector3(x_pos, y_pos, 0); //Random.value < .5 ? 1 : 
             current_asteroid++;
             if(current_asteroid == asteroid_count)
             {
