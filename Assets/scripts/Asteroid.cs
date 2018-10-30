@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Asteroid : MonoBehaviour
 {
-    public float gravity = 5f;
+    public float gravity = 10f;
 
     public float speed = 1f;
     public float angle = 0f;
@@ -30,10 +30,11 @@ public class Asteroid : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
        
-        if (other.gameObject.tag == "ShipContainer")
+        if (other.gameObject.tag == "Ship")
         {
-            Vector3 force = Vector3.Normalize(new Vector3(0, gameObject.transform.position.y - ship.transform.position.y, 0));
+            Vector3 force = Vector3.Normalize(new Vector3(gameObject.transform.position.x - ship.transform.position.x, gameObject.transform.position.y - ship.transform.position.y, 0));
             force.y = force.y * gravity;
+            force.x = force.x * gravity;
             ship.GetComponent<ShipController>().ApplyForce(force);
         }
     }

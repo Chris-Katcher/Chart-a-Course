@@ -18,7 +18,15 @@ public class Spawner : MonoBehaviour
     {
         for(int i = 0; i < asteroid_count; i++)
         {
-            asteroids[i] = Instantiate(asteroid, new Vector3(25, i*5, 0), Quaternion.identity);
+            asteroids[i] = Instantiate(asteroid, new Vector3(25, 50, 0), Quaternion.identity);
+        }
+
+        for(int i = 0; i < asteroid_count; i++)
+        {
+            for(int j = i + 1; j < asteroid_count; j++)
+            {
+                Physics.IgnoreCollision(asteroids[i].GetComponent<Collider>(), asteroids[j].GetComponent<Collider>());
+            }
         }
 	}
 
