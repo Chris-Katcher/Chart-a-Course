@@ -1,0 +1,8 @@
+As speed increases, ship gets more bright.
+When ship comes to stop, game over
+when ship crashed game over.
+
+put ship's forward vector to be perpendicular to the vector b/w ship and asteroid
+
+ship doesnt begin rotation until link is "taught" at which point the ship's right vec
+and the ship's velocity vec should simply need to be rotated

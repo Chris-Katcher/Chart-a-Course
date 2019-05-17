@@ -1,0 +1,6 @@
+Library/
+.vs/
+Logs/
+obj/
+Packages/
+UnityPackageManager/
