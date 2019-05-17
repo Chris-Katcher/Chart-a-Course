@@ -9,13 +9,14 @@ public class Asteroid : MonoBehaviour
     public float speed = 1000f;
     public float angle = 0f;
 
+    
     private GameObject ship;
     private BoxCollider boxCol;
 
     void Awake()
     {
-        ship = GameObject.Find("ShipModel");
-        boxCol = ship.GetComponent<BoxCollider>();
+        //ship = GameObject.Find("ShipModel");
+       // boxCol = ship.GetComponent<BoxCollider>();
     }
     // Use this for initialization
     void Start ()
@@ -24,7 +25,7 @@ public class Asteroid : MonoBehaviour
         float x_vel = Mathf.Cos(Mathf.Deg2Rad * angle) * speed;
         float y_vel = Mathf.Sin(Mathf.Deg2Rad * angle) * speed;
         
-        gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(x_vel, y_vel, 0));
+        //gameObject.GetComponent<Rigidbody>().AddForce(new Vector3(x_vel, y_vel, 0));
 	}
 
     private void OnTriggerStay(Collider other)
@@ -44,6 +45,11 @@ public class Asteroid : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-		
-	}
+       
+    }
+
+    public void UpdateDistance(float dist, bool isClosest)
+    {
+
+    }
 }
