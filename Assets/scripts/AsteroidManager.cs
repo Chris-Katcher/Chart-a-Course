@@ -14,6 +14,9 @@ public class AsteroidManager
     private List<GameObject> asteroids = new List<GameObject>();
 
     private static int DEFAULT_COUNT = 20;
+    private static float INTER_AST_DIST = 100;
+
+    public Vector2 ChunkCenter { get; set; }
 
 	// Use this for initialization
 	public AsteroidManager()
@@ -28,10 +31,18 @@ public class AsteroidManager
 
     public void InstantiateAsteroids(GameObject ast)
     {
+        ChunkCenter = new Vector2(0,0);
         asteroid = ast;
         for (int i = 0; i < asteroid_count; i++)
         {
-            asteroids.Add(GameObject.Instantiate(asteroid, new Vector3(10, 10, 0), Quaternion.identity));
+            Vector3 pos = new Vector3((Random.value - .5f) * 500 + ChunkCenter.x, (Random.value - .5f) * 500 + ChunkCenter.y, 0);
+
+            while(!CheckDistance(pos))
+            {
+                pos = new Vector3((Random.value - .5f) * 500 + ChunkCenter.x, (Random.value - .5f) * 500 + ChunkCenter.y, 0);
+            }
+
+            asteroids.Add(GameObject.Instantiate(asteroid, pos, Quaternion.identity));
         }
 
         for (int i = 0; i < asteroid_count; i++)
@@ -41,6 +52,39 @@ public class AsteroidManager
                 Physics.IgnoreCollision(asteroids[i].GetComponent<Collider>(), asteroids[j].GetComponent<Collider>());
             }
         }
+    }
+
+    public void ReChunk(Vector2 center)
+    {
+        ChunkCenter = center;
+
+        foreach(GameObject ast in asteroids)
+        {
+            ast.transform.Translate(new Vector3(0,0,INTER_AST_DIST * 2));
+        }
+
+        foreach (GameObject ast in asteroids)
+        {
+            Vector3 pos = new Vector3((Random.value - .5f) * 500 + ChunkCenter.x, (Random.value - .5f) * 500 + ChunkCenter.y, 0);
+
+            while (!CheckDistance(pos))
+            {
+                pos = new Vector3((Random.value - .5f) * 500 + ChunkCenter.x, (Random.value - .5f) * 500 + ChunkCenter.y, 0);
+            }
+            ast.transform.position = pos;
+        }
+    }
+
+    private bool CheckDistance(Vector3 newPos)
+    {
+        foreach(GameObject ast in asteroids)
+        {
+            if(Vector3.Distance(newPos, ast.transform.position) < INTER_AST_DIST)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public GameObject GetClosestAsteroid(Vector3 mousePos)

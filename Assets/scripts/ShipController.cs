@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -37,7 +38,11 @@ public class ShipController : MonoBehaviour
     private Vector3 Target = Vector3.zero;
     private float TargetDistance = 0.0f;
 
-    private static readonly float LINK_THREASHOLD = 1.10f;
+    private static readonly float LINK_THREASHOLD = 0;
+
+    private float speed = 1f;
+
+    private float Sign = 0f;
 
     // Use this for initialization
 	void Start ()
@@ -59,7 +64,15 @@ public class ShipController : MonoBehaviour
         
     }
 
-
+    private void PropertyChangedHandler(object sender, PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case "IsLinked":
+                IsLinked = !IsLinked;
+                break;
+        }
+    }
     public void ApplyTorque(Vector3 force)
     {
         float z_rot = rb.rotation.eulerAngles.z;
@@ -79,45 +92,27 @@ public class ShipController : MonoBehaviour
         IsLinked = true;
         LinkedObject = ast;
         PreviousPosition = transform.position;
-        //rb.velocity = Vector3.zero;
         TargetDistance = Vector3.Distance(transform.position, LinkedObject.transform.position);
-        Target = Quaternion.Euler(0, 0, -90) * (ast.transform.position - transform.position); 
+        Target = (ast.transform.position - transform.position);
 
-        //transform.right = target;
-
-
-        //Vector3 vecToAst = ast.transform.position - transform.position;
-        //Vector3 dir = Vector3.Cross(vecToAst, Vector3.forward);
-        //float mag = vecToAst.magnitude;
-        //transform.LookAt(dir.normalized);
+        Sign = -Mathf.Sign(Target.x * Target.y);
+        speed = 1f + Time.deltaTime * .1f;
+        
     }
 
     public void Unlink()
     {
         IsLinked = false;
         LinkedObject = null;
-        //rb.velocity = PreviousVelocity;
         Debug.Log(PreviousVelocity);
+        speed = 1f - Time.deltaTime * .1f;
     }
 
     public void CalculateRotation()
     {
         Vector3 vel = rb.velocity;
         float rot = vel.y * rot_mult;
-        //Vector3 dir = gameObject.transform.TransformDirection(Vector3.forward).normalized;
-        //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.right) * 1000, Color.yellow);
-        //Vector3 z_rot = vel.magnitude * gameObject.transform.TransformDirection(Vector3.forward).normalized;
-        //Debug.DrawRay(transform.position, z_rot * 1000, Color.yellow);
-        //Debug.Log(z_rot);
-        //float dot_product = Vector3.Dot(vel, dir);
-        //float angle_sign = Mathf.Sign(vel.y) * Mathf.Sign(dir.y) * Mathf.Sign(dir.y);
-
-        //Debug.Log(dir);
-        //if (vel.magnitude * dir.magnitude > 0)
-        //{
-        //    float rot = rot_mult * angle_sign * Mathf.Rad2Deg * (Mathf.Acos(dot_product / (vel.magnitude * dir.magnitude)));
-
-        //}
+      
         ApplyRotation(new Vector3(0, 90, 45 + rot));
         //rb.AddTorque(new Vector3(0, vel.y, 0));
         //Debug.Log();
@@ -131,17 +126,28 @@ public class ShipController : MonoBehaviour
     private void ApplyLinkForce()
     {
 
-        if (Vector3.Distance(transform.position, LinkedObject.transform.position) >= TargetDistance + LINK_THREASHOLD)
+        //if (Vector3.Distance(transform.position, LinkedObject.transform.position) >= TargetDistance + LINK_THREASHOLD)
+        // {
+        Vector3 linkDirectional = (LinkedObject.transform.position - transform.position).normalized;
+       if (Mathf.Sign(linkDirectional.x) != Mathf.Sign(rb.velocity.x) &&
+            Mathf.Sign(linkDirectional.y) != Mathf.Sign(rb.velocity.y))
         {
-            transform.right = Vector3.RotateTowards(transform.right, Target, Time.deltaTime, 0.0f);
-
-            //float angle = Vector3.Angle(Target, transform.right);
-
-            //transform.right = Quaternion.AngleAxis( angle, Vector3.forward) * transform.right;
-            //transform.RotateAround(LinkedObject.transform.position, Vector3.forward, 30 * Time.deltaTime);
-            //Vector3.RotateTowards(rb.velocity, Target, Time.deltaTime, 0.0f);
-            rb.velocity = transform.right * rb.velocity.magnitude;
+            ApplyForce((LinkedObject.transform.position - transform.position).normalized * 75f);
         }
+       else
+        {
+            ApplyForce((LinkedObject.transform.position - transform.position).normalized * 7.5f);
+        }
+            ApplyForce((LinkedObject.transform.position - transform.position).normalized * 7.5f);
+        //transform.right = Vector3.RotateTowards(transform.right, Target, 2f * Time.deltaTime, 0.0f); // working rotation
+        Quaternion targetRotation = Quaternion.FromToRotation(Vector3.right, rb.velocity.normalized);
+
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 5);
+
+
+        //rb.velocity = transform.right * rb.velocity.magnitude * speed ;
+
+        //}
     }
 
 	// Update is called once per frame
@@ -151,78 +157,17 @@ public class ShipController : MonoBehaviour
         
         if (IsLinked)
         {
-            Target = Quaternion.Euler(0, 0, -90) * (LinkedObject.transform.position -  transform.position);
+            Target =  (LinkedObject.transform.position -  transform.position); //Quaternion.Euler(0, 0, Sign*90) *
             Debug.DrawRay(transform.position, Target.normalized *1000, Color.blue);
             ApplyLinkForce();
-            //transform.RotateAround(LinkedObject.transform.position, Vector3.forward, 20 * Time.deltaTime); //rb.velocity.magnitude
-            //PreviousVelocity = (transform.position - PreviousPosition) / Time.deltaTime;
-            //PreviousPosition = transform.position;
-            //transform.right = Vector3.RotateTowards(transform.right, Target, Time.deltaTime, 0.0f);
         }
-        
-        //    float y_Velocity; // = rb.velocity.y > 0 ? Mathf.Ceil(rb.velocity.y / rb.velocity.y) : Mathf.Floor( -1 * rb.velocity.y / rb.velocity.y);
+        else
+        {
+            Quaternion targetRotation = Quaternion.FromToRotation(Vector3.right, rb.velocity.normalized);
 
-        //    if (rb.velocity.y > 2.5f)
-        //    {
-        //        y_Velocity = Mathf.Ceil(rb.velocity.y / rb.velocity.y);
-        //    }
-        //    else if (rb.velocity.y < -2.5f)
-        //    {
-        //        y_Velocity = Mathf.Floor(-1 * rb.velocity.y / rb.velocity.y);
-        //    }
-        //    else
-        //    {
-        //        y_Velocity = 0;
-        //    }
-
-        //    if (y_Velocity != direction)
-        //    {
-        //        if(direction + y_Velocity == 0)
-        //        {
-        //            ApplyTorque(new Vector3(y_Velocity, 0, 0) * torque_force);
-        //        }
-        //        else
-        //        {
-        //            ApplyTorque(new Vector3(y_Velocity == 0 ? direction * -1 : y_Velocity, 0, 0) * torque_force / 2);
-        //        }
-
-        //        direction = y_Velocity;
-        //    }
-
-
-        //    if ( Input.GetButton("Fire1")) // current_thrust > 0 &&
-        //    {
-        //        current_thrust-= depletion_rate;
-        //        thrust_engaged = Time.time;
-
-        //        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); // - gameObject.transform.position;
-        //        Plane plane = new Plane(Vector3.forward, transform.position);
-        //        float dist = 0;
-        //        if (plane.Raycast(ray, out dist))
-        //        {
-        //            Vector3 mousePos = ray.GetPoint(dist);
-        //            mousePos.z = 0;
-        //            mousePos.x = 0;
-        //            mousePos.y -= gameObject.transform.position.y;
-        //            //Debug.Log(mousePos);
-        //            ApplyForce(mousePos * thrustForce);
-
-        //            mousePos = mousePos.normalized;
-        //        }
-
-        //    }
-        //    else if((thrust_engaged + thrust_delay <= Time.time) && current_thrust < thrust_capacity)
-        //    {
-        //        current_thrust++;
-        //        thrust_engaged += thrust_recovery;
-        //    }
-        //    //Debug.DrawRay(transform.position, transform.TransformDirection(Quaternion.AngleAxis(20, gameObject.transform.right) * Vector3.forward) * 1000, Color.yellow);
-        //    if(rb.velocity.magnitude < 10)
-        //    {
-        //        //ApplyForce(transform.right * 10 );
-        //    }
-        //    //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * 1000, Color.yellow);
-        //    CalculateRotation();
-        //    UpdateUI();
+            transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 3);
+            //transform.right = Vector3.RotateTowards(transform.right, rb.velocity, Time.deltaTime, 0.0f);
+            rb.velocity = transform.right * rb.velocity.magnitude * speed;
+        }
     }
 }

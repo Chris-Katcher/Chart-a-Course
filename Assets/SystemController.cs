@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 public class SystemController : MonoBehaviour
@@ -10,9 +11,29 @@ public class SystemController : MonoBehaviour
 
     private GameObject ShipGO;
     private ShipController ShipController;
+    private LinkController LinkController;
     private AsteroidManager AsteroidManager;
 
+    private GameObject LinkedAsteroid;
+
     private bool IsLinked = false;
+
+    private void PropertyChangedHandler(object sender, PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case "IsLinked":
+                IsLinked = !IsLinked;
+                if(!IsLinked)
+                    ShipController.Unlink();
+                else
+                    ShipController.Link(LinkedAsteroid);
+                break;
+        }
+    }
+
+
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +41,8 @@ public class SystemController : MonoBehaviour
         AsteroidManager = new AsteroidManager();
         AsteroidManager.InstantiateAsteroids(Asteroid);
         ShipController = ShipGO.GetComponentInChildren<ShipController>();
+        LinkController = ShipGO.GetComponentInChildren<LinkController>();
+        LinkController.PropertyChanged += PropertyChangedHandler;
     }
 
     // Update is called once per frame
@@ -30,8 +53,7 @@ public class SystemController : MonoBehaviour
         {
             if(IsLinked)
             {
-                ShipController.Unlink();
-                IsLinked = false;
+                LinkController.IsLinked = false;
             }
 
             else
@@ -46,17 +68,16 @@ public class SystemController : MonoBehaviour
                     mousePosWorld.x -= gameObject.transform.position.x;
                     mousePosWorld.y -= gameObject.transform.position.y;
                     mousePosWorld.z -= gameObject.transform.position.z;
-                    //Debug.Log(mousePos);
-                    //ApplyForce(mousePos * thrustForce);
-                    GameObject ast = AsteroidManager.GetClosestAsteroid(mousePosWorld);
-                    ShipController.Link(ast);
-                    IsLinked = true;
-                    //mousePosWorld = mousePosWorld.normalized;
+
+                    LinkedAsteroid = AsteroidManager.GetClosestAsteroid(mousePosWorld);
+                    LinkController.IsLinked = true;
                 }
             }
+        }
 
-            
-            //Debug.DrawRay(transform.position, transform.TransformDirection(Quaternion.AngleAxis(20, gameObject.transform.right) * Vector3.forward) * 1000, Color.yellow);
+        if (ShipGO.transform.position.x > AsteroidManager.ChunkCenter.x + 250)
+        {
+            AsteroidManager.ReChunk(new Vector2(500, 0));
         }
     }
 }
